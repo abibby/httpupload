@@ -11,32 +11,19 @@ import (
 )
 
 const (
-	// Decimal
-
 	KB = 1000
 	MB = 1000 * KB
 	GB = 1000 * MB
 	TB = 1000 * GB
 	PB = 1000 * TB
-
-	// Binary
-
-	KiB = 1024
-	MiB = 1024 * KiB
-	GiB = 1024 * MiB
-	TiB = 1024 * GiB
-	PiB = 1024 * TiB
 )
 
-var root string
+var root = env("PORT", "5958")
+var port = env("ROOT_DIR", "./files")
 
 func main() {
-	root = os.Getenv("ROOT_DIR")
-	if root == "" {
-		root = "./files"
-	}
-	log.Print("listening at http://localhost:5958 ")
-	http.ListenAndServe(":5958", http.HandlerFunc(ReceiveFile))
+	log.Printf("listening at http://localhost:%s", port)
+	http.ListenAndServe(":"+port, http.HandlerFunc(ReceiveFile))
 }
 func ReceiveFile(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -76,5 +63,12 @@ func ReceiveFile(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
-	return
+}
+
+func env(key, defaultValue string) string {
+	v := os.Getenv(key)
+	if v == "" {
+		return defaultValue
+	}
+	return v
 }
