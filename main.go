@@ -18,8 +18,8 @@ const (
 	PB = 1000 * TB
 )
 
-var root = env("PORT", "5958")
-var port = env("ROOT_DIR", "./files")
+var root = env("ROOT_DIR", "./files")
+var port = env("PORT", "5958")
 
 func main() {
 	log.Printf("listening at http://localhost:%s", port)
